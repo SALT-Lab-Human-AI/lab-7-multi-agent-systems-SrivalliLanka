@@ -101,7 +101,7 @@ class AgentConfig:
 
     RESEARCH_AGENT = {
         "name": "ResearchAgent",
-        "role": "Market Researcher",
+        "role": "AI Research Specialist", # updated role
         "temperature": 0.7,
     }
 
@@ -123,6 +123,12 @@ class AgentConfig:
         "temperature": 0.7,
     }
 
+    MARKETING_AGENT = {
+        "name": "MarketingAgent",
+        "role": "Marketing Strategist",
+        "temperature": 0.7,
+    }
+
     @classmethod
     def get_agent_config(cls, agent_type: str) -> Dict[str, Any]:
         """Get configuration for a specific agent type"""
@@ -131,6 +137,7 @@ class AgentConfig:
             "analysis": cls.ANALYSIS_AGENT,
             "blueprint": cls.BLUEPRINT_AGENT,
             "reviewer": cls.REVIEWER_AGENT,
+            "marketing": cls.MARKETING_AGENT,
         }
         return agents.get(agent_type, {})
 
@@ -144,6 +151,7 @@ class WorkflowConfig:
         "analysis",
         "blueprint",
         "review",
+        "marketing",
     ]
 
     # Phase descriptions
@@ -152,6 +160,7 @@ class WorkflowConfig:
         "analysis": "Market Gap Analysis & Opportunities",
         "blueprint": "Product Blueprint Creation",
         "review": "Strategic Review & Recommendations",
+        "marketing": "Marketing Strategy Development",
     }
 
     # Task descriptions
@@ -160,6 +169,7 @@ class WorkflowConfig:
         "analysis": "Identify 3 key market opportunities and gaps",
         "blueprint": "Create product blueprint with features and user flows",
         "review": "Review blueprint and provide strategic recommendations",
+        "marketing": "Develop go-to-market strategy and marketing plan",
     }
 
     @classmethod

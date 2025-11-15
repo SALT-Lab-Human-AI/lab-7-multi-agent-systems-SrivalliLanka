@@ -51,6 +51,9 @@ class SimpleInterviewPlatformWorkflow:
         # Phase 4: Review
         self.phase_review()
 
+        # Phase 5: Marketing
+        self.phase_marketing()
+
         # Summary
         self.print_summary()
 
@@ -173,6 +176,43 @@ Provide strategic review and recommendations."""
         print("\n[ReviewerAgent Output]")
         print(self.outputs["review"])
 
+    def phase_marketing(self):
+        """Phase 5: Marketing Strategy"""
+        print("\n" + "="*80)
+        print("PHASE 5: MARKETING STRATEGY")
+        print("="*80)
+        print("[MarketingAgent is developing go-to-market strategy...]")
+
+        system_prompt = """You are a marketing strategist specializing in B2B SaaS products. 
+Based on the product blueprint and review, create a concise go-to-market strategy including:
+- Target audience segments (2-3)
+- Key marketing channels (3-4)
+- Value proposition
+- Launch timeline (brief)
+Keep it concise - 150 words."""
+
+        user_message = f"""Product Blueprint:
+{self.outputs['blueprint']}
+
+Strategic Review:
+{self.outputs['review']}
+
+Develop a go-to-market strategy for this AI interview platform."""
+
+        response = self.client.chat.completions.create(
+            model=self.model,
+            temperature=Config.AGENT_TEMPERATURE,
+            max_tokens=Config.AGENT_MAX_TOKENS,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message}
+            ]
+        )
+
+        self.outputs["marketing"] = response.choices[0].message.content
+        print("\n[MarketingAgent Output]")
+        print(self.outputs["marketing"])
+
     def print_summary(self):
         """Print final summary"""
         print("\n" + "="*80)
@@ -180,11 +220,12 @@ Provide strategic review and recommendations."""
         print("="*80)
 
         print("""
-This workflow demonstrated a 4-agent collaboration:
+This workflow demonstrated a 5-agent collaboration:
 1. ResearchAgent - Analyzed the market
 2. AnalysisAgent - Identified opportunities
 3. BlueprintAgent - Designed the product
 4. ReviewerAgent - Provided strategic recommendations
+5. MarketingAgent - Developed go-to-market strategy
 
 Each agent received context from the previous agent's output,
 demonstrating the sequential workflow pattern of AutoGen.
@@ -214,6 +255,11 @@ demonstrating the sequential workflow pattern of AutoGen.
         print("PHASE 4: STRATEGIC REVIEW (Full Output)")
         print("-"*80)
         print(self.outputs["review"])
+        
+        print("\n" + "-"*80)
+        print("PHASE 5: MARKETING STRATEGY (Full Output)")
+        print("-"*80)
+        print(self.outputs["marketing"])
 
         # Save to file
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -244,6 +290,11 @@ demonstrating the sequential workflow pattern of AutoGen.
             f.write("PHASE 4: STRATEGIC REVIEW\n")
             f.write("-"*80 + "\n")
             f.write(self.outputs["review"] + "\n")
+            
+            f.write("\n" + "-"*80 + "\n")
+            f.write("PHASE 5: MARKETING STRATEGY\n")
+            f.write("-"*80 + "\n")
+            f.write(self.outputs["marketing"] + "\n")
         
         print(f"\n💾 Full results saved to: {output_file}")
 

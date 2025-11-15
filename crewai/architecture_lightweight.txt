@@ -1,0 +1,4 @@
+Architecture for E-Commerce Platform
+================================================================================
+
+A concise high-level architecture design for E-Commerce Platform has been provided with clear structure, the design includes system overview, core components, technology stack and key architectural decisions to support 100K users and ensure high availability and performance.
